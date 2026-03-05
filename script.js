@@ -1,81 +1,145 @@
 const quizData = [
+
 {
-question: "What is the capital of India?",
-options: ["Mumbai","Delhi","Kolkata","Chennai"],
-answer: 1
+question:"What does HTML stand for?",
+a:"Hyper Text Markup Language",
+b:"Home Tool Markup Language",
+c:"Hyperlinks Text Mark Language",
+d:"Hyper Tool Multi Language",
+correct:"a"
 },
 
 {
-question: "Which language runs in browser?",
-options: ["Python","Java","C","JavaScript"],
-answer: 3
+question:"Which language is used for styling web pages?",
+a:"HTML",
+b:"JQuery",
+c:"CSS",
+d:"Python",
+correct:"c"
 },
 
 {
-question: "2 + 2 = ?",
-options: ["3","4","5","6"],
-answer: 1
+question:"Which language runs in browser?",
+a:"Java",
+b:"C++",
+c:"Python",
+d:"JavaScript",
+correct:"d"
 },
 
 {
-question: "HTML stands for?",
-options: [
-"Hyper Text Markup Language",
-"High Text Machine Language",
-"Hyper Tool Multi Language",
-"None"
-],
-answer: 0
+question:"Which company developed Java?",
+a:"Microsoft",
+b:"Sun Microsystems",
+c:"Google",
+d:"IBM",
+correct:"b"
+},
+
+{
+question:"Which tag is used for image in HTML?",
+a:"<img>",
+b:"<image>",
+c:"<pic>",
+d:"<src>",
+correct:"a"
 }
+
 ];
 
-let currentQuestion = 0;
+const question = document.getElementById("question");
+const a_text = document.getElementById("a_text");
+const b_text = document.getElementById("b_text");
+const c_text = document.getElementById("c_text");
+const d_text = document.getElementById("d_text");
+
+const submit = document.getElementById("submit");
+const answers = document.querySelectorAll("input[name='answer']");
+const timerText = document.getElementById("timer");
+
+let currentQuiz = 0;
 let score = 0;
 
-function loadQuestion(){
+let timeLeft = 10;
+let timer;
 
-let q = quizData[currentQuestion];
+loadQuiz();
 
-document.getElementById("question").innerText = q.question;
+function loadQuiz(){
 
-let options = document.getElementsByClassName("option");
+clearInterval(timer);
+timeLeft = 10;
+startTimer();
 
-for(let i=0;i<options.length;i++){
-options[i].innerText = q.options[i];
-}
+answers.forEach(answer => answer.checked = false);
 
-}
+const data = quizData[currentQuiz];
 
-function checkAnswer(option){
-
-let correct = quizData[currentQuestion].answer;
-
-if(option === correct){
-alert("Correct Answer");
-score++;
-}
-else{
-alert("Wrong Answer");
-}
+question.innerText = data.question;
+a_text.innerText = data.a;
+b_text.innerText = data.b;
+c_text.innerText = data.c;
+d_text.innerText = data.d;
 
 }
+
+function startTimer(){
+
+timerText.innerText = "Time: " + timeLeft;
+
+timer = setInterval(()=>{
+
+timeLeft--;
+
+timerText.innerText = "Time: " + timeLeft;
+
+if(timeLeft === 0){
+nextQuestion();
+}
+
+},1000);
+
+}
+
+function getSelected(){
+
+let answer;
+
+answers.forEach(ans=>{
+if(ans.checked){
+answer = ans.id;
+}
+});
+
+return answer;
+
+}
+
+submit.addEventListener("click", nextQuestion);
 
 function nextQuestion(){
 
-currentQuestion++;
+clearInterval(timer);
 
-if(currentQuestion < quizData.length){
-loadQuestion();
+const answer = getSelected();
+
+if(answer === quizData[currentQuiz].correct){
+score++;
+}
+
+currentQuiz++;
+
+if(currentQuiz < quizData.length){
+loadQuiz();
 }
 else{
-document.getElementById("question").innerText="Quiz Finished";
-document.querySelector(".options").style.display="none";
-document.getElementById("nextBtn").style.display="none";
 
-document.getElementById("score").innerText =
-"Your Score: "+score+" / "+quizData.length;
+document.querySelector(".quiz-container").innerHTML =
+`
+<h2>Your Score: ${score}/${quizData.length}</h2>
+<button onclick="location.reload()">Restart Quiz</button>
+`;
+
 }
 
 }
-
-loadQuestion();
