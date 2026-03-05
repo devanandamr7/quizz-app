@@ -1,0 +1,26 @@
+body{
+    font-family: Arial;
+    background-color: #f2f2f2;
+    text-align: center;
+}
+
+.quiz-container{
+    background: white;
+    width: 400px;
+    padding: 20px;
+    margin: auto;
+    margin-top: 100px;
+    border-radius: 10px;
+}
+
+.option{
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+#nextBtn{
+    padding:10px 20px;
+}
